@@ -87,6 +87,11 @@ func sendProgress(oid string, bytesSoFar int64, bytesSinceLast int, writer, errW
 
 func initAgent(writer, errWriter *bufio.Writer) {
 	// Make sure we have a remote.
+	if len(os.Args) < 2 {
+		resp := &initResponse{&operationError{3, "Args for remote not set"}}
+		sendResponse(resp, writer, errWriter)
+		return
+	}
 	remote = os.Args[1]
 	if remote == "" {
 		resp := &initResponse{&operationError{3, "No remote specified when launching the process"}}
